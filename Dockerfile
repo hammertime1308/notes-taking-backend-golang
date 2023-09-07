@@ -1,16 +1,14 @@
-FROM golang:1.20 as builder
+FROM golang:1.20
 
-WORKDIR /build
-COPY . .
-RUN GOOS=linux go build -o notes-server .
-COPY notes-server /output/
-COPY config /output/
-
-
-
-FROM alpine:latest
 WORKDIR /app
 
-COPY --from=build /output .
+COPY . .
+RUN go mod tidy
+RUN go build -o notes-server
+RUN mkdir -p /output/config/
+RUN cp -r ./config /output
+RUN cp notes-server /output
+
 EXPOSE 8080
+
 CMD ["./notes-server"]
