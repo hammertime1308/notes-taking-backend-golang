@@ -1,0 +1,11 @@
+{
+	"serveOn": 8080,
+	"database":{
+		"host": "",
+		"port": 0,
+		"username": "",
+		"password": "",
+		"dbName": ""
+	},
+	"logLevel": "DEBUG"
+}
