@@ -14,6 +14,6 @@ func registerRoutes(r *mux.Router) {
 		response := map[string]string{"status": "running"}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
-	})
+	}).Methods(http.MethodGet)
 
 }

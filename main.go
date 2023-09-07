@@ -61,7 +61,8 @@ func main() {
 	registerRoutes(r)
 
 	server := &http.Server{
-		Addr: fmt.Sprintf(":%v", config.Get().ServeOn),
+		Addr:    fmt.Sprintf(":%v", config.Get().ServeOn),
+		Handler: r,
 	}
 
 	sigChan := make(chan os.Signal, 1)
