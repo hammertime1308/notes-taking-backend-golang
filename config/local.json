@@ -1,11 +1,11 @@
 {
 	"serveOn": 8080,
 	"database":{
-		"host": "",
-		"port": 0,
-		"username": "",
-		"password": "",
-		"dbName": ""
+		"host": "database",
+		"port": 3306,
+		"username": "root",
+		"password": "password",
+		"dbName": "notes_application"
 	},
 	"logLevel": "DEBUG"
 }
