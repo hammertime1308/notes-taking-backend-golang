@@ -24,4 +24,7 @@ func (c *controller) RegisterRoutes(r *mux.Router) {
 
 	// api/v1/signup route -> register a new user
 	r.HandleFunc("/api/v1/signup", c.signUp).Methods(http.MethodPost)
+
+	// api/v1/login -> login the user and returns
+	r.HandleFunc("/api/v1/login", c.login).Methods(http.MethodPost)
 }

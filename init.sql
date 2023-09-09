@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS notes (
 CREATE TABLE IF NOT EXISTS user_session (
 	user_id INT, 
 	session_id varchar(255),
-	PRIMARY KEY (session_id),
+	PRIMARY KEY (user_id),
 	FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+CREATE INDEX idx_users_session_id on user_session(session_id);

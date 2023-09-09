@@ -12,4 +12,5 @@ require (
 require (
 	github.com/google/uuid v1.3.1 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	gopkg.in/guregu/null.v4 v4.0.0 // indirect
 )

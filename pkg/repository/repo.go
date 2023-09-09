@@ -9,6 +9,7 @@ type Repository interface {
 	Connect() error
 	Close() error
 	AddNewUser(ctx context.Context, user models.User) error
+	Login(ctx context.Context, user models.User) (string, error)
 }
 
 func New(config *models.Config) Repository {
