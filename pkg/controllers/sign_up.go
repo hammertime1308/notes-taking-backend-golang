@@ -37,7 +37,6 @@ func (c *controller) signUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.SessionId = util.GenerateSessionID()
 	user.Password = util.GetMD5Hash(user.Password)
 
 	err = c.repository.AddNewUser(r.Context(), user)

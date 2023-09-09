@@ -19,7 +19,7 @@ type sql struct {
 }
 
 const (
-	ADD_USER = `INSERT INTO users(name,email,password,session_id) VALUES(?,?,?,?)`
+	ADD_USER = `INSERT INTO users(name,email,password) VALUES(?,?,?)`
 )
 
 func (s *sql) Connect() error {
@@ -35,6 +35,6 @@ func (s *sql) Close() error {
 }
 
 func (s *sql) AddNewUser(ctx context.Context, user models.User) error {
-	_, err := s.ExecContext(ctx, ADD_USER, user.Name, user.Email, user.Password, user.SessionId)
+	_, err := s.ExecContext(ctx, ADD_USER, user.Name, user.Email, user.Password)
 	return err
 }
