@@ -25,5 +25,5 @@ func (s *sql) Connect() error {
 }
 
 func (s *sql) Close() error {
-	return s.Close()
+	return s.DB.Close()
 }
