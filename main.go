@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -57,6 +58,8 @@ func main() {
 
 	r := mux.NewRouter()
 
+	r.Use(panicRecovery)
+
 	// register the routes and handlers
 	registerRoutes(r)
 
@@ -93,4 +96,17 @@ func shutdown(server *http.Server) {
 	if err != nil {
 		log.Fatalf("error shutting down server: %v\n", err)
 	}
+}
+
+// panic recovery middleware
+func panicRecovery(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			err := recover()
+			if err != nil {
+				logrus.Panicf("recovered from panic. stack trace = %v", debug.Stack())
+			}
+		}()
+		h.ServeHTTP(w, r)
+	})
 }
