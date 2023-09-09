@@ -9,12 +9,14 @@ CREATE TABLE IF NOT EXISTS users (
 );
 CREATE INDEX idx_users_email_password on users(email,password);
 CREATE TABLE IF NOT EXISTS notes (
-	note_id INT AUTO_INCREMENT,
+	id INT AUTO_INCREMENT,
 	created_by varchar(255) NOT NULL,
+	created_at DATETIME,
 	note varchar(255) NOT NULL,
-	PRIMARY KEY (note_id),
+	PRIMARY KEY (id),
 	FOREIGN KEY (created_by) REFERENCES users(user_id)
 );
+CREATE INDEX idx_created_by on notes(created_by);
 CREATE TABLE IF NOT EXISTS user_session (
 	user_id INT, 
 	session_id varchar(255),
