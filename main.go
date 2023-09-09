@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"notes-taking-backend-golang/pkg/config"
+	"notes-taking-backend-golang/pkg/controllers"
 	"notes-taking-backend-golang/pkg/repository"
 	"os"
 	"os/signal"
@@ -43,6 +44,9 @@ func main() {
 	// get repository
 	db := repository.New(config.Get())
 
+	// get controller
+	controller := controllers.NewController(db)
+
 	// connect to database
 	err := db.Connect()
 	if err != nil {
@@ -61,7 +65,7 @@ func main() {
 	r.Use(panicRecovery)
 
 	// register the routes and handlers
-	registerRoutes(r, db)
+	controller.RegisterRoutes(r)
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%v", config.Get().ServeOn),
