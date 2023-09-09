@@ -1,10 +1,14 @@
 package repository
 
-import "notes-taking-backend-golang/models"
+import (
+	"context"
+	"notes-taking-backend-golang/models"
+)
 
 type Repository interface {
 	Connect() error
 	Close() error
+	AddNewUser(ctx context.Context, user models.User) error
 }
 
 func New(config *models.Config) Repository {

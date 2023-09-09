@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"context"
 	"fmt"
+	"notes-taking-backend-golang/models"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -16,6 +18,10 @@ type sql struct {
 	dbName   string
 }
 
+const (
+	ADD_USER = `INSERT INTO users(name,email,password,session_id) VALUES(?,?,?,?)`
+)
+
 func (s *sql) Connect() error {
 	dataSourceName := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", s.username, s.password, s.hostname, s.port, s.dbName)
 
@@ -26,4 +32,9 @@ func (s *sql) Connect() error {
 
 func (s *sql) Close() error {
 	return s.DB.Close()
+}
+
+func (s *sql) AddNewUser(ctx context.Context, user models.User) error {
+	_, err := s.ExecContext(ctx, ADD_USER, user.Name, user.Email, user.Password, user.SessionId)
+	return err
 }

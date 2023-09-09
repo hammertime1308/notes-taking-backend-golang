@@ -61,7 +61,7 @@ func main() {
 	r.Use(panicRecovery)
 
 	// register the routes and handlers
-	registerRoutes(r)
+	registerRoutes(r, db)
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%v", config.Get().ServeOn),
@@ -104,7 +104,7 @@ func panicRecovery(h http.Handler) http.Handler {
 		defer func() {
 			err := recover()
 			if err != nil {
-				logrus.Panicf("recovered from panic. stack trace = %v", debug.Stack())
+				logrus.Panicf("recovered from panic. stack trace = %v", string(debug.Stack()))
 			}
 		}()
 		h.ServeHTTP(w, r)
