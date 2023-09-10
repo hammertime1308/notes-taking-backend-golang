@@ -11,6 +11,7 @@ type Repository interface {
 	AddNewUser(ctx context.Context, user models.User) error
 	Login(ctx context.Context, user models.User) (string, error)
 	AddNote(ctx context.Context, note models.Note) (models.Note, error)
+	GetAllNotes(ctx context.Context, user models.User) ([]models.Note, error)
 }
 
 func New(config *models.Config) Repository {

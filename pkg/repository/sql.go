@@ -26,6 +26,7 @@ const (
 	ADD_USER_SESSION  = `INSERT INTO user_session(user_id,session_id) VALUES (?,?) ON DUPLICATE KEY UPDATE session_id=VALUES(session_id)`
 	ADD_NOTE          = `INSERT INTO notes (created_by,created_at,note) SELECT user_id,NOW(),? from user_session where session_id=?`
 	GET_LATEST_NOTE   = `SELECT id,note FROM notes WHERE created_by = (SELECT user_id FROM user_session WHERE session_id=? LIMIT 1) ORDER BY created_at DESC LIMIT 1`
+	GET_ALL_NOTES     = `SELECT id,note FROM notes WHERE created_by = (SELECT user_id FROM user_session WHERE session_id=? LIMIT 1) ORDER BY created_at ASC`
 )
 
 func (s *sql) Connect() error {
@@ -81,4 +82,10 @@ func (s *sql) GetLatestNote(ctx context.Context, note models.Note) (models.Note,
 
 	err := s.GetContext(ctx, &latestNote, GET_LATEST_NOTE, note.SessionId)
 	return latestNote, err
+}
+
+func (s *sql) GetAllNotes(ctx context.Context, user models.User) ([]models.Note, error) {
+	notes := make([]models.Note, 0)
+	err := s.DB.SelectContext(ctx, &notes, GET_ALL_NOTES, user.SessionId)
+	return notes, err
 }
