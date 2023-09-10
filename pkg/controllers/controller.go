@@ -33,4 +33,7 @@ func (c *controller) RegisterRoutes(r *mux.Router) {
 
 	// api/v1/notes -> get all notes created by user
 	r.HandleFunc("/api/v1/notes", c.getAllNotes).Methods(http.MethodGet)
+
+	// api/v1/notes -> delete a specific note based on id
+	r.HandleFunc("/api/v1/notes", c.deleteNote).Methods(http.MethodDelete)
 }

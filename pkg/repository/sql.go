@@ -27,6 +27,7 @@ const (
 	ADD_NOTE          = `INSERT INTO notes (created_by,created_at,note) SELECT user_id,NOW(),? from user_session where session_id=?`
 	GET_LATEST_NOTE   = `SELECT id,note FROM notes WHERE created_by = (SELECT user_id FROM user_session WHERE session_id=? LIMIT 1) ORDER BY created_at DESC LIMIT 1`
 	GET_ALL_NOTES     = `SELECT id,note FROM notes WHERE created_by = (SELECT user_id FROM user_session WHERE session_id=? LIMIT 1) ORDER BY created_at ASC`
+	DELETE_NOTE       = `DELETE FROM notes WHERE id=? AND created_by = (SELECT user_id FROM user_session WHERE session_id = ? LIMIT 1)`
 )
 
 func (s *sql) Connect() error {
@@ -88,4 +89,17 @@ func (s *sql) GetAllNotes(ctx context.Context, user models.User) ([]models.Note,
 	notes := make([]models.Note, 0)
 	err := s.DB.SelectContext(ctx, &notes, GET_ALL_NOTES, user.SessionId)
 	return notes, err
+}
+
+func (s *sql) DeleteNote(ctx context.Context, note models.Note) error {
+	result, err := s.ExecContext(ctx, DELETE_NOTE, note.Id, note.SessionId)
+	if err != nil {
+		return err
+	}
+
+	if val, _ := result.RowsAffected(); val == 0 {
+		return errors.New("invalid delete request")
+	}
+
+	return nil
 }
