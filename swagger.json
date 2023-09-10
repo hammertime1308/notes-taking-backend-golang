@@ -1,0 +1,250 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Notes server",
+		"description": "This service contains API for performing CRUD operations such as creating new user, login, creating new notes, deleting note and fetching all notes",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:8080/api"
+		}
+	],
+	"tags": [
+		{
+			"name": "users",
+			"description": "API's related to user operations"
+		},
+		{
+			"name": "notes",
+			"description": "API's related to notes operations"
+		}
+	],
+	"paths": {
+		"/v1/signup": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Create a new user",
+				"requestBody": {
+					"description": "Registers a new user in system",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"email": {
+										"type": "string"
+									},
+									"password": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful operation"
+					},
+					"400": {
+						"description": "Bad Request"
+					}
+				}
+			}
+		},
+		"/v1/login": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "login with provided credentials",
+				"operationId": "findPetsByStatus",
+				"requestBody": {
+					"description": "user credentials for login",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string"
+									},
+									"password": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"sid": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"401": {
+						"description": "Unauthorized - username and password does not match"
+					}
+				}
+			}
+		},
+		"/v1/notes": {
+			"get": {
+				"tags": [
+					"notes"
+				],
+				"summary": "Fetches all the notes created by user",
+				"parameters": [
+					{
+						"name": "sid",
+						"in": "query",
+						"description": "session_id for the user(generated via login)",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"notes": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "string"
+													},
+													"note": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"401": {
+						"description": "Unauthorized - sid is invalid"
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"notes"
+				],
+				"summary": "Create a new note for user",
+				"requestBody": {
+					"description": "User session_id for adding a new note",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"sid": {
+										"type": "string"
+									},
+									"note": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "successfully created a note",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "id for the note created"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"401": {
+						"description": "Unauthorized - invalid session_id"
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"notes"
+				],
+				"summary": "Deletes a note for the user",
+				"requestBody": {
+					"description": "User session_id for deleting the note",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"sid": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string",
+										"description": "note id to delete"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "successfully deleted the note"
+					},
+					"400": {
+						"description": "Bad Request - id or session_id is invalid"
+					},
+					"401": {
+						"description": "Unauthorized - invalid session_id"
+					}
+				}
+			}
+		}
+	}
+}
